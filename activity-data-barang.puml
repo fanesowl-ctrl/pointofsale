@@ -1,0 +1,85 @@
+@startuml
+title Activity Diagram - Manajemen Data Barang
+
+|Admin|
+start
+:Login & Masuk Menu Data Barang;
+:Klik Tombol Tambah / Edit / Hapus;
+
+split
+    -[hidden]->
+    :Lihat Data;
+split again
+    :**TAMBAH BARANG**;
+    :Input Data Barang 
+    (Kode, Nama, Harga, Stok, Gambar);
+    :Klik Simpan;
+    |Sistem|
+    :Validasi Input;
+    if (Valid?) then (Ya)
+        :Proses Data Barang;
+        |Database|
+        :Insert Data ke Tabel Products;
+        |Sistem|
+        :Tampilkan Pesan Sukses;
+    else (Tidak)
+        :Tampilkan Pesan Error;
+    endif
+    detach
+
+split again
+    |Admin|
+    :**EDIT BARANG**;
+    :Pilih Barang;
+    :Ubah Data Barang;
+    :Klik Update;
+    |Sistem|
+    :Validasi Input;
+    if (Valid?) then (Ya)
+        :Proses Update Data;
+        |Database|
+        :Update Data di Tabel Products;
+        |Sistem|
+        :Tampilkan Pesan Sukses;
+    else (Tidak)
+        :Tampilkan Pesan Error;
+    endif
+    detach
+
+split again
+    |Admin|
+    :**HAPUS BARANG**;
+    :Pilih Barang;
+    :Klik Hapus;
+    :Konfirmasi Hapus;
+    |Sistem|
+    :Cek Ketergantungan Data;
+    if (Aman Dihapus?) then (Ya)
+        |Database|
+        :Delete Data dari Tabel Products;
+        |Sistem|
+        :Tampilkan Pesan Sukses;
+    else (Tidak)
+        :Tampilkan Pesan Gagal 
+        (Data Sedang Digunakan);
+    endif
+    detach
+
+split again
+    |Admin|
+    :**LIHAT / CARI**;
+    :Ketikan Kata Kunci;
+    |Sistem|
+    :Request Data Barang;
+    |Database|
+    :Select * From Products 
+    Where Name Like %Keyword%;
+    |Sistem|
+    :Tampilkan Daftar Tabel Barang;
+    detach
+
+end split
+
+|Admin|
+stop
+@enduml

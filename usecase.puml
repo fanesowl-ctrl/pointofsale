@@ -1,0 +1,99 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Admin" as admin
+actor "Kasir" as kasir
+
+package "Aplikasi Point of Sale (POS)" {
+    
+    usecase "Login" as UC_Login
+    usecase "Logout" as UC_Logout
+    usecase "Register (Admin)" as UC_Register
+
+    package "Dashboard" {
+        usecase "Lihat Dashboard Admin" as UC_AdminDashboard
+        usecase "Lihat Dashboard Kasir" as UC_KasirDashboard
+    }
+
+    package "Manajemen Produk (Barang)" {
+        usecase "Kelola Data Barang" as UC_ManageProducts
+        usecase "Tambah Barang" as UC_AddProduct
+        usecase "Edit Barang" as UC_EditProduct
+        usecase "Hapus Barang" as UC_DeleteProduct
+        usecase "Export Data Barang" as UC_ExportProduct
+    }
+
+    package "Manajemen Pengguna" {
+        usecase "Kelola Data Kasir" as UC_ManageKasir
+        usecase "Tambah Kasir" as UC_AddKasir
+        usecase "Edit Kasir" as UC_EditKasir
+        usecase "Hapus Kasir" as UC_DeleteKasir
+    }
+
+    package "Pengaturan Sistem" {
+        usecase "Kelola Pengaturan Pembayaran (QRIS)" as UC_PaymentSettings
+    }
+
+    package "Laporan (Admin)" {
+        usecase "Lihat Laporan Bulanan" as UC_MonthlyReport
+        usecase "Detail Laporan Bulanan" as UC_DetailMonthlyReport
+        usecase "Export Laporan Bulanan (PDF)" as UC_ExportMonthlyReport
+    }
+
+    package "Transaksi (Kasir)" {
+        usecase "Kelola Transaksi" as UC_ManageTransaction
+        usecase "Input Transaksi Baru" as UC_CreateTransaction
+        usecase "Edit Transaksi" as UC_EditTransaction
+        usecase "Hapus Transaksi" as UC_DeleteTransaction
+    }
+
+    package "Laporan (Kasir)" {
+        usecase "Lihat Laporan Harian" as UC_DailyReport
+        usecase "Detail Laporan Harian" as UC_DetailDailyReport
+        usecase "Export Laporan Harian (PDF)" as UC_ExportDailyReport
+    }
+}
+
+' Auth
+admin -- UC_Login
+admin -- UC_Logout
+admin -- UC_Register
+
+kasir -- UC_Login
+kasir -- UC_Logout
+
+' Admin Features
+admin -- UC_AdminDashboard
+admin -- UC_ManageProducts
+admin -- UC_ManageKasir
+admin -- UC_PaymentSettings
+admin -- UC_MonthlyReport
+
+' Admin Relationships
+UC_ManageProducts ..> UC_AddProduct : <<include>>
+UC_ManageProducts ..> UC_EditProduct : <<include>>
+UC_ManageProducts ..> UC_DeleteProduct : <<include>>
+UC_ManageProducts ..> UC_ExportProduct : <<extend>>
+
+UC_ManageKasir ..> UC_AddKasir : <<include>>
+UC_ManageKasir ..> UC_EditKasir : <<include>>
+UC_ManageKasir ..> UC_DeleteKasir : <<include>>
+
+UC_MonthlyReport ..> UC_DetailMonthlyReport : <<include>>
+UC_MonthlyReport ..> UC_ExportMonthlyReport : <<extend>>
+
+' Kasir Features
+kasir -- UC_KasirDashboard
+kasir -- UC_ManageTransaction
+kasir -- UC_DailyReport
+
+' Kasir Relationships
+UC_ManageTransaction ..> UC_CreateTransaction : <<include>>
+UC_ManageTransaction ..> UC_EditTransaction : <<include>>
+UC_ManageTransaction ..> UC_DeleteTransaction : <<include>>
+
+UC_DailyReport ..> UC_DetailDailyReport : <<include>>
+UC_DailyReport ..> UC_ExportDailyReport : <<extend>>
+
+@enduml
